@@ -17,8 +17,24 @@ global.quiz = {
         channelName: 'maarten'
     },{
         score: 0,
+        fullname: 'Arjan',
+        channelName: 'maarten'
+    },{
+        score: 0,
+        fullname: 'Olaf',
+        channelName: 'olaf'
+    },{
+        score: 0,
+        fullname: 'Niels',
+        channelName: 'niels'
+    },{
+        score: 0,
         fullname: 'Daan',
         channelName: 'daan'
+    },{
+        score: 0,
+        fullname: 'Edwin',
+        channelName: 'edwin'
     }],
     currentBuzzerOrder :[1,4,2]
 }

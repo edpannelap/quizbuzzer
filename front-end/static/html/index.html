@@ -206,14 +206,20 @@
             quiz.currentBuzzerOrder.forEach(element => {
                 console.log(element);
                 console.log(quiz.players[element].fullname);
-
+                console.log(id);
                 document.getElementById('buzzorder').innerHTML += `<div id="buzzblock${id}" class="buzzedblock player${element}">${quiz.players[element].fullname}</div>`
                 id++;
             });
         }
+
+        function setScore() {
+            // Bepaal volgorde
+            // Teken volgorde
+        }
+        
         function initQuiz() {
             alert('initQuiz');
-            document.getElementById('title').title;
+            document.getElementById('title').innerHTML = quiz.title;
             clearBuzzers();
             setBuzzers();
         }
@@ -325,13 +331,6 @@
             </div>
             <div style="width:32%;height:100%; background-color: lightblue;position:absolute;right: 0px;">
                 <div id="buzzorder" width="" height="900" style="width:100%;height:100%;">
-                    <div id="buzzblock0" class="buzzedblock player0">André</div>
-                    <div id="buzzblock1" class="buzzedblock player1">André</div>
-                    <div id="buzzblock2" class="buzzedblock player2">Freek</div>
-                    <div id="buzzblock3" class="buzzedblock player3">André</div>
-                    <div id="buzzblock4" class="buzzedblock player4">Freek</div>
-                    <div id="buzzblock5" class="buzzedblock player5">André</div>
-                    <div id="buzzblock6" class="buzzedblock player6">Freek</div>
                 </div>
             </div>
         </div>
