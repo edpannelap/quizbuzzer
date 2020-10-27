@@ -52,14 +52,27 @@ setInterval(function () {
 
 
 setInterval(function () {
-    quiz.currentBuzzerOrder = [];
+    resetBuzzers();
+}, 6000);
+
+
+function nextQuestion() {
+    global.quiz.currentBuzzerOrder = [];
+    const messageObject = {};
+    const messagetext ='';
+    let event = { type: 'nextQuestion', level: 'info', messagetext: messagetext, messageObject: messageObject };
+    global.eventserver.sendEvent(event);
+    resetBuzzers();
+}
+
+function resetBuzzers() {
+    global.quiz.currentBuzzerOrder = [];
     const messageObject = {currentBuzzerOrder: global.quiz.currentBuzzerOrder};
     const messagetext ='';
     let event = { type: 'buzzers', level: 'info', messagetext: messagetext, messageObject: messageObject };
     global.eventserver.sendEvent(event);
-}, 6000);
 
-
+}
 
 // init the quiz
 
