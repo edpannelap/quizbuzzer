@@ -40,29 +40,6 @@
              filter: drop-shadow(5px 5px 4px darkgray);
          }
 
-
-         .player1 {
-             background-color: red;
-         }
-         .player2 {
-             background-color: green;
-         }
-         .player3 {
-             background-color: blue;
-         }
-         .player4 {
-             background-color: purple;
-         }
-         .player5 {
-             background-color: yellow;
-         }
-         .player6 {
-             background-color: gray;
-         }
-         .player7 {
-             background-color: orange;
-         }
-
          .buzzer {
              cursor: crosshair;
              background-color: red;
@@ -220,7 +197,8 @@
              // console.log('--');
              // console.log(id);
              // console.log(quiz.players[id].fullname);
-             document.getElementById('buzzorder').innerHTML += `<div id="buzzblock${id}" class="buzzedblock player${id}">${quiz.players[id].fullname}</div>`
+             let player = quiz.players.find(player => player.id == id);
+             document.getElementById('buzzorder').innerHTML += `<div id="buzzblock${id}" class="buzzedblock" style=`background-color: ${player.color}`>${player.fullname}</div>`
            });
          }
 
@@ -234,14 +212,14 @@
              var id = element.id
              document.getElementById('scoreboard').innerHTML += 
                `<div id="scoreblock${id}" class="scoreblock">
-              <div id="playerpostition${id}" class="playername player${element.id}" onclick="document.location.href='/client?player-id=${id}'">${element.fullname}</div>
+              <div id="playerpostition${id}" class="playername" style=`background-color: ${player.color}` onclick="document.location.href='/client?player-id=${id}'">${element.fullname}</div>
               <div id="scorepostition${id}" class="score">
               <input type="button" value="-" onclick="setScore(${id},${element.score-1})">
               ${element.score}
               <input type="button" value="+" onclick="setScore(${id},${element.score+1})">
               </div>
             </div>`
-               id++;                        
+             id++;                        
            });
 
          }
@@ -272,23 +250,23 @@
          }
 
          function setScore(spelerId,value){
-            var params = { spelerId, score: value};
-            request = new igor_ajax_request();
-            request.url = '/host/setscore';
-            request.method = 'POST';
-            request.params = JSON.stringify(params);
-            request.callback = function (currentrequest) {
-                try {
-                    response = eval("(" + currentrequest.responseText + ")");
-                } catch (error) {
-                    alert(error);
-                }
-            }
-            request.send();
-            console.log(params);
-        }
+           var params = { spelerId, score: value};
+           request = new igor_ajax_request();
+           request.url = '/host/setscore';
+           request.method = 'POST';
+           request.params = JSON.stringify(params);
+           request.callback = function (currentrequest) {
+             try {
+               response = eval("(" + currentrequest.responseText + ")");
+             } catch (error) {
+               alert(error);
+             }
+           }
+           request.send();
+           console.log(params);
+         }
 
-        function alterScore(spelerId,value){
+         function alterScore(spelerId,value){
            var params = { spelerId, value};
            request = new igor_ajax_request();
            request.url = '/host/score';
