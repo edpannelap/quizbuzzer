@@ -198,7 +198,7 @@
              // console.log(id);
              // console.log(quiz.players[id].fullname);
              let player = quiz.players.find(player => player.id == id);
-             document.getElementById('buzzorder').innerHTML += `<div id="buzzblock${id}" class="buzzedblock" style=`background-color: ${player.color}`>${player.fullname}</div>`
+             document.getElementById('buzzorder').innerHTML += `<div id="buzzblock${id}" class="buzzedblock" style="background-color: ${player.color}">${player.fullname}</div>`
            });
          }
 
@@ -210,16 +210,17 @@
            // teken volgorde
            scoreOrder.forEach(element => {
              var id = element.id
+             let player = quiz.players.find(player => player.id == id);
              document.getElementById('scoreboard').innerHTML += 
                `<div id="scoreblock${id}" class="scoreblock">
-              <div id="playerpostition${id}" class="playername" style=`background-color: ${player.color}` onclick="document.location.href='/client?player-id=${id}'">${element.fullname}</div>
+              <div id="playerpostition${id}" class="playername" style="background-color: ${player.color}" onclick="document.location.href='/client?player-id=${id}'">${element.fullname}</div>
               <div id="scorepostition${id}" class="score">
               <input type="button" value="-" onclick="setScore(${id},${element.score-1})">
               ${element.score}
               <input type="button" value="+" onclick="setScore(${id},${element.score+1})">
               </div>
             </div>`
-             id++;                        
+               id++;                        
            });
 
          }
