@@ -216,12 +216,11 @@
 
          function drawBuzzers() {
            clearBuzzers();
-           quiz.currentBuzzerOrder.forEach(element => {
-             var id=element.id;
-             console.log(element);
-             console.log(quiz.players[element].fullname);
-             console.log(id);
-             document.getElementById('buzzorder').innerHTML += `<div id="buzzblock${id}" class="buzzedblock player${element}">${quiz.players[element].fullname}</div>`
+           quiz.currentBuzzerOrder.forEach(id => {
+             // console.log('--');
+             // console.log(id);
+             // console.log(quiz.players[id].fullname);
+             document.getElementById('buzzorder').innerHTML += `<div id="buzzblock${id}" class="buzzedblock player${id}">${quiz.players[id].fullname}</div>`
            });
          }
 
@@ -234,7 +233,7 @@
            scoreOrder.forEach(element => {
              var id = element.id
              document.getElementById('scoreboard').innerHTML += 
-             `<div id="scoreblock${id}" class="scoreblock">
+               `<div id="scoreblock${id}" class="scoreblock">
               <div id="playerpostition${id}" class="playername player${element.id}" onclick="document.location.href='/client?player-id=${id}'">${element.fullname}</div>
               <div id="scorepostition${id}" class="score">
               <input type="button" value="-" onclick="setScore(${id},${element.score-1})">
@@ -242,8 +241,8 @@
               <input type="button" value="+" onclick="setScore(${id},${element.score+1})">
               </div>
             </div>`
-                            id++;                        
-             });
+               id++;                        
+           });
 
          }
          
