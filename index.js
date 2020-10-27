@@ -1,5 +1,7 @@
 'use strict';
 
+const { read } = require('fs');
+
 global.quiz = { 
     name: "eerste test Quiz",
     title: "eerste test Quiz titel",
@@ -7,42 +9,50 @@ global.quiz = {
         id: 1,
         score: 0,
         fullname: 'André',
-        channelName: 'andre'
+        channelName: 'andre',
+        color: 'red'
     },{
         id: 2,
         score: 9,
         fullname: 'Freek',
-        channelName: 'freek'
+        channelName: 'freek',
+        color: 'yellow'
     },{
         id: 3,
         score: 0,
         fullname: 'Maarten',
-        channelName: 'maarten'
+        channelName: 'maarten',
+        color: 'gray'
     },{
         id: 4,
         score: 3,
         fullname: 'Arjan',
-        channelName: 'maarten'
+        channelName: 'maarten',
+        color: 'orange'
     },{
         id: 5,
         score: 7,
         fullname: 'Olaf',
-        channelName: 'olaf'
+        channelName: 'olaf',
+        color: 'green'
     },{
         id: 6,
         score: 2340,
         fullname: 'Niels',
-        channelName: 'niels'
+        channelName: 'niels',
+        color: 'blue'
     },{
         id: 7,
         score: 0,
         fullname: 'Daan',
-        channelName: 'daan'
+        channelName: 'daan',
+        color: 'purple'
     },{
         id: 8,
         score: 0,
         fullname: 'Edwin',
-        channelName: 'edwin'
+        channelName: 'edwin',
+        color: 'cyan'
     }],
     currentBuzzerOrder :[]
 }
