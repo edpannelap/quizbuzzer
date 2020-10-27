@@ -1,0 +1,262 @@
+<html>
+
+<head>
+    <style>
+        .scoreblock {
+            border-radius: 0px;
+            border: 1px solid black;
+            padding: 10px;
+            margin: 20px;
+            text-align: left;
+            position: relative;
+            height: 35px;
+        }
+
+        .playername {
+            font-size: 2em;
+            position: absolute;
+            width: 50%;
+            left:0px;
+        }
+        .score {
+            font-size: 2em;
+            position: absolute;
+            width:25%;
+            right:0px;
+            background-color: white;
+            border: 1px solid black;
+            text-align: right;
+        }
+
+
+        .buzzedblock {
+            border-radius: 20px;
+            border: 1px solid black;
+            padding: 10px;
+            margin: 20px;
+            text-align: center;
+            background: radial-gradient(circle, rgba(255,255,255,.7) 0%, rgba(0,0,0,.2) 100%);
+            filter: drop-shadow(5px 5px 4px darkgray);
+        }
+
+
+        .player1 {
+            background-color: red;
+        }
+        .player2 {
+            background-color: green;
+        }
+        .player3 {
+            background-color: blue;
+        }
+        .player4 {
+            background-color: purple;
+        }
+        .player5 {
+            background-color: yellow;
+        }
+        .player6 {
+            background-color: gray;
+        }
+        .player7 {
+            background-color: orange;
+        }
+
+    </style>
+    <script>
+
+        function igor_ajax_request(url, params) {
+            var instance = this;
+
+            // vars
+            this.busy = false;
+            this.url = url;
+            this.method = 'GET';
+            this.callback = function () { };
+            this.params = params;
+            this.requestHeaders = {};
+
+            // ajax request object
+            if (window.XMLHttpRequest) {
+                instance.request = new XMLHttpRequest();
+            } else if (window.ActiveXObject) {
+                instance.request = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            if (instance.request) {
+                // callback when ready
+                instance.request.onreadystatechange = function () {
+                    if (instance.request.readyState == 4) {
+                        if (instance.request.status == 200) {
+                            instance.callback(instance.request);
+                            instance.busy = false;
+                        }
+                        else {
+                            if (instance.request.status) {
+                                var result = {};
+                                try {
+                                    result = eval("(" + instance.request.responseText + ")");
+                                } catch (error) {
+                                    showError(error);
+                                }
+                                if (result.message) {
+                                    showError("error: " + instance.request.status + " melding: " + result.message);
+                                }
+                                else {
+                                    showError("error: " + instance.request.status);
+                                }
+                                instance.busy = false;
+                            } else {
+                                showError("error: unknown");
+                                instance.busy = false;
+                            }
+                        }
+                    }
+                }
+
+
+
+            } else {
+                // no request; apparently no ajax available
+                return false;
+            }
+
+            this.send = function () {
+                // only when not active
+                if (instance.busy) {
+                    return false
+                }
+                instance.busy = new Date().getTime();
+                // prevent caching
+                if (instance.url.search('\\?') == -1) {
+                    instance.url = instance.url + '?';
+                } else {
+                    instance.url = instance.url + '&';
+                }
+
+                //
+                if (instance.method == 'GET') {
+                    instance.url = instance.url + instance.busy;
+                }
+                // send
+                instance.request.open(instance.method, instance.url, true);
+
+
+                for (var key in this.requestHeaders) {
+                    instance.request.setRequestHeader(key, this.requestHeaders[key])
+                }
+
+                if (instance.method == 'POST') {
+                    //      instance.request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    //      instance.request.setRequestHeader("Content-length", instance.params.length);
+                    //      instance.request.setRequestHeader("Connection", "close");
+                    // console.log(instance.params);
+                    //                instance.request.setRequestHeader( "Content-type", "application/json" );
+                    instance.request.send(instance.params);
+
+                } else {
+                    instance.request.send(null);
+                }
+            }
+
+            this.abort = function () {
+                if (instance.busy) {
+                    instance.request.abort();
+                    instance.request = null;
+                    instance.busy = false;
+                }
+            }
+
+        }
+
+
+        function getDataFromServer() {
+            var params = {};
+            request = new igor_ajax_request();
+            request.url = '/quizinfo';
+            request.method = 'GET';
+            request.params = JSON.stringify(params);
+            request.callback = function (currentrequest) {
+                try {
+                    quizinfo = eval("(" + currentrequest.responseText + ")");
+                    initQuiz();
+                } catch (error) {
+                    alert(error);
+                }
+            }
+            request.send();
+        }
+
+
+        function initApplication() {
+            getDataFromServer();
+        }
+    </script>
+</head>
+
+<body onload="">
+    <div id="pagecontainer" style="width:100%;height:100%;position:absolute; top:0px; left:0px;">
+        <div style="width:100%;height:75%; background-color: purple; position:absolute;">
+            <div style="width:32%;height:100%; background-color: lightgray; position:absolute; left:0px;">
+                <div id="scoreboard" width="100%" height="900" style="width:100%;height:100%;">
+                    <div id="scoreblock1" class="scoreblock"> 
+                        <div id="playerpostition1" class="playername player1">André</div>
+                        <div id="scorepostition1" class="score">18</div>
+                    </div>
+                    <div id="scoreblock2" class="scoreblock"> 
+                        <div id="playerpostition2" class="playername player1">André</div>
+                        <div id="scorepostition2" class="score">14</div>
+                    </div>
+                    <div id="scoreblock3" class="scoreblock"> 
+                        <div id="playerpostition3" class="playername player2">André</div>
+                        <div id="scorepostition3" class="score">8</div>
+                    </div>
+                    <div id="scoreblock4" class="scoreblock"> 
+                        <div id="playerpostition4" class="playername player3">André</div>
+                        <div id="scorepostition4" class="score">7</div>
+                    </div>
+                    <div id="scoreblock5" class="scoreblock"> 
+                        <div id="playerpostition5" class="playername player4">André</div>
+                        <div id="scorepostition5" class="score">7</div>
+                    </div>
+                    <div id="scoreblock6" class="scoreblock"> 
+                        <div id="playerpostition6" class="playername player5">André</div>
+                        <div id="scorepostition6" class="score">3</div>
+                    </div>
+                    <div id="scoreblock7" class="scoreblock"> 
+                        <div id="playerpostition7" class="playername player6">André</div>
+                        <div id="scorepostition7" class="score">0</div>
+                    </div>
+                </div>
+            </div>
+            <div style="width:32%;height:100%; background-color: lightgoldenrodyellow;position:absolute; left:34%">
+                <div id="buzzer" width="" height="900" style="width:100%;height:100%;">
+                    <div id="buzzer" class="buzzer"></div>
+                </div>
+
+            </div>
+            <div style="width:32%;height:100%; background-color: lightblue;position:absolute;right: 0px;">
+                <div id="buzzorder" width="" height="900" style="width:100%;height:100%;">
+                    <div id="buzzblock1" class="buzzedblock player1">André</div>
+                    <div id="buzzblock2" class="buzzedblock player2">Freek</div>
+                    <div id="buzzblock3" class="buzzedblock player3">André</div>
+                    <div id="buzzblock4" class="buzzedblock player4">Freek</div>
+                    <div id="buzzblock5" class="buzzedblock player5">André</div>
+                    <div id="buzzblock6" class="buzzedblock player6">Freek</div>
+                    <div id="buzzblock7" class="buzzedblock player7">André</div>
+                </div>
+            </div>
+        </div>
+        <div id="statusContainer"
+            style="width:100%; height:25%; background-color: lightgreen; color:black; padding:20px;">
+            Status
+            <div id="statusScroller"
+                style="overflow-y: scroll; overscroll-behavior-y: contain; scroll-snap-type: y mandatory; height:calc(100% - 20px);">
+                <div id="statusText" style="display: block;">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
