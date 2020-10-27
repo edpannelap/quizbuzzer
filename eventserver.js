@@ -29,9 +29,9 @@ function startServer() {
       });
     }
 
-    if (req.url.match(/layout/)) {
+    if (req.url.match(/quizinfo/)) {
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(tracklayout));
+      res.end(JSON.stringify(global.quiz));
     }
 
     if (req.url.match(/stream/)) {
@@ -43,7 +43,7 @@ function startServer() {
       eventTargets.push(res)
     }
 
-  }).listen(8080);
+  }).listen(80);
 }
 
 function sendEvent(event) {

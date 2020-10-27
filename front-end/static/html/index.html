@@ -2,6 +2,10 @@
 
 <head>
     <style>
+        .title {
+            font-size: 1.5em;
+            text-align: center;
+        }
         .scoreblock {
             border-radius: 0px;
             border: 1px solid black;
@@ -64,6 +68,7 @@
 
     </style>
     <script>
+        var quiz;
 
         function igor_ajax_request(url, params) {
             var instance = this;
@@ -178,7 +183,7 @@
             request.params = JSON.stringify(params);
             request.callback = function (currentrequest) {
                 try {
-                    quizinfo = eval("(" + currentrequest.responseText + ")");
+                    quiz = eval("(" + currentrequest.responseText + ")");
                     initQuiz();
                 } catch (error) {
                     alert(error);
@@ -191,14 +196,101 @@
         function initApplication() {
             getDataFromServer();
         }
+
+        function clearBuzzers(){
+            document.getElementById('buzzorder').innerHTML ='';
+        }
+
+        function setBuzzers() {
+            var id=0;
+            quiz.currentBuzzerOrder.forEach(element => {
+                console.log(element);
+                console.log(quiz.players[element].fullname);
+
+                document.getElementById('buzzorder').innerHTML += `<div id="buzzblock${id}" class="buzzedblock player${element}">${quiz.players[element].fullname}</div>`
+                id++;
+            });
+        }
+        function initQuiz() {
+            alert('initQuiz');
+            document.getElementById('title').title;
+            clearBuzzers();
+            setBuzzers();
+        }
+
+        function startQuiz() {
+            alert('startQuiz');
+        }
+
+        var source = new EventSource("/stream");
+        source.onmessage = function (event) {
+            if (event.data) {
+                let eventMessage = {};
+                try {
+                    eventMessage = JSON.parse(event.data)
+                } catch {
+
+                }
+                if (eventMessage && eventMessage.type == 'loging') {
+
+                    let text = new Date().toLocaleTimeString() + '\t' + eventMessage.messagetext;
+                    let statusScroller = document.getElementById("statusScroller");
+
+                    document.getElementById("statusText").innerHTML += text + "<br>";
+                    statusScroller.scrollTop = document.getElementById("statusText").clientHeight;
+                }
+
+                if (eventMessage && eventMessage.type == 'buzzer') {
+                    let messageObject = eventMessage.messageObject;
+                    if (tracklayout.sensors[messageObject.sensor]) {
+                        tracklayout.sensors[messageObject.sensor].status = messageObject.status;
+                        sensorEvent(messageObject.sensor);
+                    }
+                }
+
+                if (eventMessage && eventMessage.type == 'score') {
+                    let messageObject = eventMessage.messageObject;
+                    tracklayout.blocks[messageObject.block].status = messageObject.status;
+                    drawBlock(messageObject.block);
+                }
+
+                if (eventMessage && eventMessage.type == 'nextQuestion') {
+                    console.log(eventMessage);
+                    let messageObject = eventMessage.messageObject;
+                    if (tracklayout.turnouts[messageObject.turnout]) {
+                        tracklayout.turnouts[messageObject.turnout].status = messageObject.status;
+                        setTurnout(messageObject.turnout);
+                    }
+                }
+
+                if (eventMessage && eventMessage.type == 'quizReset') {
+                    let messageObject = eventMessage.messageObject;
+                    tracklayout.blocks[messageObject.block].status = messageObject.status;
+                    drawBlock(messageObject.block);
+                }
+
+                if (eventMessage && eventMessage.type == 'forceReload') {
+                    let messageObject = eventMessage.messageObject;
+                    location.reload();
+                }
+
+            }
+        };
+
     </script>
 </head>
 
-<body onload="">
+<body onload="initApplication()">
     <div id="pagecontainer" style="width:100%;height:100%;position:absolute; top:0px; left:0px;">
+        <div style="width:100%;height:25px;" id="title" class="title">Title</div>
+
         <div style="width:100%;height:75%; background-color: purple; position:absolute;">
             <div style="width:32%;height:100%; background-color: lightgray; position:absolute; left:0px;">
                 <div id="scoreboard" width="100%" height="900" style="width:100%;height:100%;">
+                    <div id="scoreblock0" class="scoreblock"> 
+                        <div id="playerpostition0" class="playername player6">André</div>
+                        <div id="scorepostition0" class="score">0</div>
+                    </div>
                     <div id="scoreblock1" class="scoreblock"> 
                         <div id="playerpostition1" class="playername player1">André</div>
                         <div id="scorepostition1" class="score">18</div>
@@ -223,10 +315,6 @@
                         <div id="playerpostition6" class="playername player5">André</div>
                         <div id="scorepostition6" class="score">3</div>
                     </div>
-                    <div id="scoreblock7" class="scoreblock"> 
-                        <div id="playerpostition7" class="playername player6">André</div>
-                        <div id="scorepostition7" class="score">0</div>
-                    </div>
                 </div>
             </div>
             <div style="width:32%;height:100%; background-color: lightgoldenrodyellow;position:absolute; left:34%">
@@ -237,13 +325,13 @@
             </div>
             <div style="width:32%;height:100%; background-color: lightblue;position:absolute;right: 0px;">
                 <div id="buzzorder" width="" height="900" style="width:100%;height:100%;">
+                    <div id="buzzblock0" class="buzzedblock player0">André</div>
                     <div id="buzzblock1" class="buzzedblock player1">André</div>
                     <div id="buzzblock2" class="buzzedblock player2">Freek</div>
                     <div id="buzzblock3" class="buzzedblock player3">André</div>
                     <div id="buzzblock4" class="buzzedblock player4">Freek</div>
                     <div id="buzzblock5" class="buzzedblock player5">André</div>
                     <div id="buzzblock6" class="buzzedblock player6">Freek</div>
-                    <div id="buzzblock7" class="buzzedblock player7">André</div>
                 </div>
             </div>
         </div>
