@@ -273,7 +273,7 @@
          }
 
          function setScore(spelerId,value){
-            var params = { spelerId, value};
+            var params = { spelerId, score: value};
             request = new igor_ajax_request();
             request.url = '/host/setscore';
             request.method = 'POST';
@@ -364,8 +364,8 @@
 
              if (eventMessage && eventMessage.type == 'score') {
                let messageObject = eventMessage.messageObject;
-               tracklayout.blocks[messageObject.block].status = messageObject.status;
-               drawBlock(messageObject.block);
+               quiz = messageObject.status;
+               drawScore();
              }
 
              if (eventMessage && eventMessage.type == 'nextQuestion') {

@@ -60,8 +60,9 @@ function startServer() {
         }
         console.log(jsonbody);
         var foundIndex = global.quiz.players.findIndex(element => { return element.id === jsonbody.spelerId } );
-        console.log(foundIndex);
+        console.log("index:",foundIndex);
         global.quiz.players[foundIndex].score = jsonbody.score;
+        console.log(quiz);
         global.updateScore();
       });
       res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -82,9 +83,7 @@ function startServer() {
         }
         console.log(jsonbody.spelerId);
         if (jsonbody.spelerId) {
-          if (!global.quiz.currentBuzzerOrder.includes(jsonbody.spelerId)) {
-            global.quiz.currentBuzzerOrder.push(jsonbody.spelerId);
-          }
+          global.quiz.currentBuzzerOrder.push(jsonbody.spelerId);
         }
         const messageObject = {currentBuzzerOrder: global.quiz.currentBuzzerOrder};
         const messagetext ='';

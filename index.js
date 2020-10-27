@@ -94,6 +94,13 @@ global.forceReload = function () {
     global.eventserver.sendEvent(event);
 }
 
+global.updateScore = function () {
+    const messageObject = quiz;
+    const messagetext ='';
+    let event = { type: 'forceReload', level: 'info', messagetext: messagetext, messageObject: messageObject };
+    global.eventserver.sendEvent(event);
+}
+
 // init the quiz
 
 // 
