@@ -226,12 +226,12 @@
          }
          
          function initQuiz() {
-           document.getElementById('title').innerHTML = quiz.title;
-           let player = quiz.players.find(player => player.id == spelerId);
-           document.getElementById('buzzer').innerHTML = player.fullname;
-           document.getElementById('buzzer').style.background = player.color;
-           drawBuzzers();
-           drawScore();
+            document.getElementById('title').innerHTML = quiz.title;
+            let player = quiz.players.find(player => player.id == spelerId);
+            document.getElementById('buzzer').innerHTML = player.fullname;
+            document.getElementById('buzzer').style.background = player.color;
+            drawBuzzers();
+            drawScore();
          }
 
          function startQuiz() {

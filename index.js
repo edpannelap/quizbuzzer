@@ -106,7 +106,7 @@ global.forceReload = function () {
 global.updateScore = function () {
     const messageObject = quiz;
     const messagetext ='';
-    let event = { type: 'forceReload', level: 'info', messagetext: messagetext, messageObject: messageObject };
+    let event = { type: 'score', level: 'info', messagetext: messagetext, messageObject: messageObject };
     global.eventserver.sendEvent(event);
 }
 
