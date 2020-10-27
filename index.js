@@ -4,7 +4,7 @@ const { sendEvent } = require('./eventserver');
 
 global.quiz = { 
     name: "eerste test Quiz",
-    title: "eerste test Quiz",
+    title: "eerste test Quiz titel",
     players : [{
         score: 0,
         fullname: 'André',
@@ -55,6 +55,26 @@ setInterval(function () {
     resetBuzzers();
 }, 6000);
 
+setInterval(function () {
+    resetQuiz();
+}, 12000);
+
+setInterval(function () {
+    forceReload();
+}, 60000);
+
+
+function resetQuiz() {
+    global.quiz.currentBuzzerOrder = [];
+    global.quiz.players.forEach(element => {
+        element.score = 0;
+    });
+    const messageObject = {};
+    const messagetext ='';
+    let event = { type: 'resetQuiz', level: 'info', messagetext: messagetext, messageObject: global.quiz };
+    global.eventserver.sendEvent(event);
+    resetBuzzers();
+}
 
 function nextQuestion() {
     global.quiz.currentBuzzerOrder = [];
@@ -72,6 +92,13 @@ function resetBuzzers() {
     let event = { type: 'buzzers', level: 'info', messagetext: messagetext, messageObject: messageObject };
     global.eventserver.sendEvent(event);
 
+}
+
+function forceReload() {
+    const messageObject = {};
+    const messagetext ='';
+    let event = { type: 'forceReload', level: 'info', messagetext: messagetext, messageObject: messageObject };
+    global.eventserver.sendEvent(event);
 }
 
 // init the quiz

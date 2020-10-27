@@ -311,10 +311,10 @@
                     }
                 }
 
-                if (eventMessage && eventMessage.type == 'quizReset') {
+                if (eventMessage && eventMessage.type == 'resetQuiz') {
                     let messageObject = eventMessage.messageObject;
-                    tracklayout.blocks[messageObject.block].status = messageObject.status;
-                    drawBlock(messageObject.block);
+                    quiz = messageObject;
+                    initQuiz();
                 }
 
                 if (eventMessage && eventMessage.type == 'forceReload') {
