@@ -42,13 +42,13 @@
 
          .buzzer {
              cursor: crosshair;
-             background-color: red;
              border-radius: 300px;
              border: 5px solid black;
              height: 300px;
              width: 300px;
              text-align: center;
              margin: 20%;
+             filter: drop-shadow(5px 5px 4px darkgray);
          }
 
         </style>
@@ -227,6 +227,9 @@
          
          function initQuiz() {
            document.getElementById('title').innerHTML = quiz.title;
+           let player = quiz.players.find(player => player.id == spelerId);
+           document.getElementById('buzzer').innerHTML = player.fullname;
+           document.getElementById('buzzer').style.background = player.color;
            drawBuzzers();
            drawScore();
          }
@@ -354,7 +357,7 @@
                     </div>
                 </div>
                 <div style="width:32%;height:100%; background-color: lightgoldenrodyellow;position:absolute; left:34%">
-                    <div id="buzzer" width="" height="900" style="width:100%;height:100%;">
+                    <div id="buzzercontainer" width="" height="900" style="width:100%;height:100%;">
                         <div id="buzzer" class="buzzer" onclick="javascript: void buzz();">BUZZER</div>
                     </div>
                 </div>
