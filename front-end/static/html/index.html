@@ -67,6 +67,7 @@
         }
 
         .buzzer {
+            cursor: crosshair;
             background-color: red;
             border-radius: 300px;
             border: 5px solid black;
@@ -211,7 +212,7 @@
             document.getElementById('buzzorder').innerHTML ='';
         }
 
-        function setBuzzers() {
+        function drawBuzzers() {
             clearBuzzers();
             var id=0;
             quiz.currentBuzzerOrder.forEach(element => {
@@ -223,19 +224,37 @@
             });
         }
 
-        function setScore() {
+        function drawScore() {
             // Bepaal volgorde
+            var id=0;
+            scoreOrder= []
+            quiz.players.forEach(element => {
+                scoreOrder[id] = {score: element.score, fullname: element.fullname, spelerId: id};
+                id++;
+            });
+            // Sorteer
+            scoreOrder.sort(function(a, b){return b.score - a.score});
+            document.getElementById('scoreboard').innerHTML = '';
             // Teken volgorde
+
+            id = 0;
+            scoreOrder.forEach(element => {
+                document.getElementById('scoreboard').innerHTML += 
+                `<div id="scoreblock${id}" class="scoreblock"> 
+                        <div id="playerpostition${id}" class="playername player${element.spelerId}">${element.fullname}</div>
+                        <div id="scorepostition${id}" class="score">${element.score}</div>
+                 </div>`
+            });
+
         }
         
         function initQuiz() {
             document.getElementById('title').innerHTML = quiz.title;
-            clearBuzzers();
-            setBuzzers();
+            drawBuzzers();
+            drawScore();
         }
 
         function startQuiz() {
-            alert('startQuiz');
         }
 
         function buzz(){
@@ -276,7 +295,7 @@
                 if (eventMessage && eventMessage.type == 'buzzers') {
                     let messageObject = eventMessage.messageObject;
                     quiz.currentBuzzerOrder = messageObject.currentBuzzerOrder;
-                    setBuzzers();
+                    drawBuzzers();
                 }
 
                 if (eventMessage && eventMessage.type == 'score') {
@@ -318,34 +337,6 @@
         <div style="width:100%;height:75%; background-color: purple; position:absolute;">
             <div style="width:32%;height:100%; background-color: lightgray; position:absolute; left:0px;">
                 <div id="scoreboard" width="100%" height="900" style="width:100%;height:100%;">
-                    <div id="scoreblock0" class="scoreblock"> 
-                        <div id="playerpostition0" class="playername player6">André</div>
-                        <div id="scorepostition0" class="score">0</div>
-                    </div>
-                    <div id="scoreblock1" class="scoreblock"> 
-                        <div id="playerpostition1" class="playername player1">André</div>
-                        <div id="scorepostition1" class="score">18</div>
-                    </div>
-                    <div id="scoreblock2" class="scoreblock"> 
-                        <div id="playerpostition2" class="playername player1">André</div>
-                        <div id="scorepostition2" class="score">14</div>
-                    </div>
-                    <div id="scoreblock3" class="scoreblock"> 
-                        <div id="playerpostition3" class="playername player2">André</div>
-                        <div id="scorepostition3" class="score">8</div>
-                    </div>
-                    <div id="scoreblock4" class="scoreblock"> 
-                        <div id="playerpostition4" class="playername player3">André</div>
-                        <div id="scorepostition4" class="score">7</div>
-                    </div>
-                    <div id="scoreblock5" class="scoreblock"> 
-                        <div id="playerpostition5" class="playername player4">André</div>
-                        <div id="scorepostition5" class="score">7</div>
-                    </div>
-                    <div id="scoreblock6" class="scoreblock"> 
-                        <div id="playerpostition6" class="playername player5">André</div>
-                        <div id="scorepostition6" class="score">3</div>
-                    </div>
                 </div>
             </div>
             <div style="width:32%;height:100%; background-color: lightgoldenrodyellow;position:absolute; left:34%">
@@ -359,14 +350,8 @@
                 </div>
             </div>
         </div>
-        <div id="statusContainer"
-            style="width:100%; height:25%; background-color: lightgreen; color:black; padding:20px;">
-            Status
-            <div id="statusScroller"
-                style="overflow-y: scroll; overscroll-behavior-y: contain; scroll-snap-type: y mandatory; height:calc(100% - 20px);">
-                <div id="statusText" style="display: block;">
-                </div>
-            </div>
+        <div id="hostContainer" style="width:100%; height:25%; background-color: lightgreen; color:black; padding:20px;">
+            Clear Buzzers
         </div>
     </div>
 </body>

@@ -41,24 +41,22 @@ function startServer() {
       }).on('end', () => {
         rawbody = Buffer.concat(body).toString();
         // at this point, `body` has the entire request body stored in it as a string
-        console.log(body);
         try {
-          body = JSON.parse(rawbody);
-          
+          jsonbody = JSON.parse(rawbody);
         } catch (error) {
           
         }
-        if (body.spelerId) {
-          if (!global.quiz.currentBuzzerOrder.includes(body.spelerId)) {
-            global.quiz.currentBuzzerOrder.push(body.spelerId);
+        if (jsonbody.spelerId) {
+          if (!global.quiz.currentBuzzerOrder.includes(jsonbody.spelerId)) {
+            global.quiz.currentBuzzerOrder.push(jsonbody.spelerId);
           }
         }
         const messageObject = {currentBuzzerOrder: global.quiz.currentBuzzerOrder};
         const messagetext ='';
         let event = { type: 'buzzers', level: 'info', messagetext: messagetext, messageObject: messageObject };
+        global.eventserver.sendEvent(event);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(global.quiz));
-        global.eventserver.sendEvent(event);
       });
       
     }

@@ -1,5 +1,7 @@
 'use strict';
 
+const { sendEvent } = require('./eventserver');
+
 global.quiz = { 
     name: "eerste test Quiz",
     title: "eerste test Quiz",
@@ -8,7 +10,7 @@ global.quiz = {
         fullname: 'André',
         channelName: 'andre'
     },{
-        score: 0,
+        score: 9,
         fullname: 'Freek',
         channelName: 'freek'
     },{
@@ -16,11 +18,11 @@ global.quiz = {
         fullname: 'Maarten',
         channelName: 'maarten'
     },{
-        score: 0,
+        score: 3,
         fullname: 'Arjan',
         channelName: 'maarten'
     },{
-        score: 0,
+        score: 7,
         fullname: 'Olaf',
         channelName: 'olaf'
     },{
@@ -48,6 +50,14 @@ setInterval(function () {
     global.eventserver.sendEvent('event keep alive' + count++)
 }, 60000);
 
+
+setInterval(function () {
+    quiz.currentBuzzerOrder = [];
+    const messageObject = {currentBuzzerOrder: global.quiz.currentBuzzerOrder};
+    const messagetext ='';
+    let event = { type: 'buzzers', level: 'info', messagetext: messagetext, messageObject: messageObject };
+    global.eventserver.sendEvent(event);
+}, 6000);
 
 
 
