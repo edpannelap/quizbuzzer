@@ -1,283 +1,276 @@
 <html>
+      <head>
+        <style>
+         .title {
+             font-size: 1.5em;
+             text-align: center;
+         }
+         .scoreblock {
+             padding: 10px;
+             margin: 20px;
+             text-align: left;
+             position: relative;
+             height: 35px;
+         }
 
-<head>
-    <style>
-        .title {
-            font-size: 1.5em;
-            text-align: center;
-        }
-        .scoreblock {
-            padding: 10px;
-            margin: 20px;
-            text-align: left;
-            position: relative;
-            height: 35px;
-        }
-
-        .playername {
-            font-size: 2em;
-            position: absolute;
-            width: 50%;
-            left:0px;
-        }
-        .score {
-            font-size: 2em;
-            position: absolute;
-            width:25%;
-            right:0px;
-            background-color: white;
-            border: 1px solid black;
-            text-align: right;
-        }
-
-
-        .buzzedblock {
-            border-radius: 20px;
-            border: 1px solid black;
-            padding: 10px;
-            margin: 20px;
-            text-align: center;
-            background: radial-gradient(circle, rgba(255,255,255,.7) 0%, rgba(0,0,0,.2) 100%);
-            filter: drop-shadow(5px 5px 4px darkgray);
-        }
+         .playername {
+             font-size: 2em;
+             position: absolute;
+             width: 50%;
+             left:0px;
+         }
+         .score {
+             font-size: 2em;
+             position: absolute;
+             width:25%;
+             right:0px;
+             background-color: white;
+             border: 1px solid black;
+             text-align: right;
+         }
 
 
-        .player1 {
-            background-color: red;
-        }
-        .player2 {
-            background-color: green;
-        }
-        .player3 {
-            background-color: blue;
-        }
-        .player4 {
-            background-color: purple;
-        }
-        .player5 {
-            background-color: yellow;
-        }
-        .player6 {
-            background-color: gray;
-        }
-        .player7 {
-            background-color: orange;
-        }
-
-        .buzzer {
-            cursor: crosshair;
-            background-color: red;
-            border-radius: 300px;
-            border: 5px solid black;
-            height: 300px;
-            width: 300px;
-            text-align: center;
-            margin: 20%;
-        }
-
-    </style>
-    <script>
-        var quiz;
-
-        function igor_ajax_request(url, params) {
-            var instance = this;
-
-            // vars
-            this.busy = false;
-            this.url = url;
-            this.method = 'GET';
-            this.callback = function () { };
-            this.params = params;
-            this.requestHeaders = {};
-
-            // ajax request object
-            if (window.XMLHttpRequest) {
-                instance.request = new XMLHttpRequest();
-            } else if (window.ActiveXObject) {
-                instance.request = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-
-            if (instance.request) {
-                // callback when ready
-                instance.request.onreadystatechange = function () {
-                    if (instance.request.readyState == 4) {
-                        if (instance.request.status == 200) {
-                            instance.callback(instance.request);
-                            instance.busy = false;
-                        }
-                        else {
-                            if (instance.request.status) {
-                                var result = {};
-                                try {
-                                    result = eval("(" + instance.request.responseText + ")");
-                                } catch (error) {
-                                    showError(error);
-                                }
-                                if (result.message) {
-                                    showError("error: " + instance.request.status + " melding: " + result.message);
-                                }
-                                else {
-                                    showError("error: " + instance.request.status);
-                                }
-                                instance.busy = false;
-                            } else {
-                                showError("error: unknown");
-                                instance.busy = false;
-                            }
-                        }
-                    }
-                }
+         .buzzedblock {
+             border-radius: 20px;
+             border: 1px solid black;
+             padding: 10px;
+             margin: 20px;
+             text-align: center;
+             background: radial-gradient(circle, rgba(255,255,255,.7) 0%, rgba(0,0,0,.2) 100%);
+             filter: drop-shadow(5px 5px 4px darkgray);
+         }
 
 
+         .player1 {
+             background-color: red;
+         }
+         .player2 {
+             background-color: green;
+         }
+         .player3 {
+             background-color: blue;
+         }
+         .player4 {
+             background-color: purple;
+         }
+         .player5 {
+             background-color: yellow;
+         }
+         .player6 {
+             background-color: gray;
+         }
+         .player7 {
+             background-color: orange;
+         }
 
-            } else {
-                // no request; apparently no ajax available
-                return false;
-            }
+         .buzzer {
+             cursor: crosshair;
+             background-color: red;
+             border-radius: 300px;
+             border: 5px solid black;
+             height: 300px;
+             width: 300px;
+             text-align: center;
+             margin: 20%;
+         }
 
-            this.send = function () {
-                // only when not active
-                if (instance.busy) {
-                    return false
-                }
-                instance.busy = new Date().getTime();
-                // prevent caching
-                if (instance.url.search('\\?') == -1) {
-                    instance.url = instance.url + '?';
-                } else {
-                    instance.url = instance.url + '&';
-                }
+        </style>
+        <script>
+         var quiz;
 
-                //
-                if (instance.method == 'GET') {
-                    instance.url = instance.url + instance.busy;
-                }
-                // send
-                instance.request.open(instance.method, instance.url, true);
+         function igor_ajax_request(url, params) {
+           var instance = this;
 
+           // vars
+           this.busy = false;
+           this.url = url;
+           this.method = 'GET';
+           this.callback = function () { };
+           this.params = params;
+           this.requestHeaders = {};
 
-                for (var key in this.requestHeaders) {
-                    instance.request.setRequestHeader(key, this.requestHeaders[key])
-                }
+           // ajax request object
+           if (window.XMLHttpRequest) {
+             instance.request = new XMLHttpRequest();
+           } else if (window.ActiveXObject) {
+             instance.request = new ActiveXObject("Microsoft.XMLHTTP");
+           }
 
-                if (instance.method == 'POST') {
-                    //      instance.request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    //      instance.request.setRequestHeader("Content-length", instance.params.length);
-                    //      instance.request.setRequestHeader("Connection", "close");
-                    // console.log(instance.params);
-                    //                instance.request.setRequestHeader( "Content-type", "application/json" );
-                    instance.request.send(instance.params);
-
-                } else {
-                    instance.request.send(null);
-                }
-            }
-
-            this.abort = function () {
-                if (instance.busy) {
-                    instance.request.abort();
-                    instance.request = null;
-                    instance.busy = false;
-                }
-            }
-
-        }
-
-
-        function getDataFromServer() {
-            var params = {};
-            request = new igor_ajax_request();
-            request.url = '/quizinfo';
-            request.method = 'GET';
-            request.params = JSON.stringify(params);
-            request.callback = function (currentrequest) {
-                try {
-                    quiz = eval("(" + currentrequest.responseText + ")");
-                    initQuiz();
-                } catch (error) {
-                    alert(error);
-                }
-            }
-            request.send();
-        }
-
-
-        function initApplication() {
-            getDataFromServer();
-        }
-
-        function clearBuzzers(){
-            document.getElementById('buzzorder').innerHTML ='';
-        }
-
-        function drawBuzzers() {
-            clearBuzzers();
-            var id=0;
-            quiz.currentBuzzerOrder.forEach(element => {
-                console.log(element);
-                console.log(quiz.players[element].fullname);
-                console.log(id);
-                document.getElementById('buzzorder').innerHTML += `<div id="buzzblock${id}" class="buzzedblock player${element}">${quiz.players[element].fullname}</div>`
-                id++;
-            });
-        }
-
-        function drawScore() {
-            // Bepaal volgorde
-            var id=0;
-            scoreOrder= []
-            quiz.players.forEach(element => {
-                scoreOrder[id] = {score: element.score, fullname: element.fullname, spelerId: id};
-                id++;
-            });
-            // Sorteer
-            scoreOrder.sort(function(a, b){return b.score - a.score});
-            document.getElementById('scoreboard').innerHTML = '';
-            // Teken volgorde
-
-            id = 0;
-            scoreOrder.forEach(element => {
-                document.getElementById('scoreboard').innerHTML += 
-                `<div id="scoreblock${id}" class="scoreblock"> 
-                        <div id="playerpostition${id}" class="playername player${element.spelerId}">${element.fullname}</div>
-                        <div id="scorepostition${id}" class="score">
-                            <input type="button" value="-" onclick="setScore(${id},${element.score-1})">
-                            ${element.score}
-                            <input type="button" value="+" onclick="setScore(${id},${element.score+1})">
-                        </div>
-                 </div>`
-            
-            });
-
-        }
-        
-        function initQuiz() {
-            document.getElementById('title').innerHTML = quiz.title;
-            drawBuzzers();
-            drawScore();
-        }
-
-        function startQuiz() {
-        }
-
-        function buzz(){
-            var params = { spelerId: 1};
-            request = new igor_ajax_request();
-            request.url = '/buzz';
-            request.method = 'POST';
-            request.params = JSON.stringify(params);
-            request.callback = function (currentrequest) {
-                try {
-                    response = eval("(" + currentrequest.responseText + ")");
-                } catch (error) {
-                    alert(error);
-                }
-            }
-            request.send();
-        }
+           if (instance.request) {
+             // callback when ready
+             instance.request.onreadystatechange = function () {
+               if (instance.request.readyState == 4) {
+                 if (instance.request.status == 200) {
+                   instance.callback(instance.request);
+                   instance.busy = false;
+                 }
+                 else {
+                   if (instance.request.status) {
+                     var result = {};
+                     try {
+                       result = eval("(" + instance.request.responseText + ")");
+                     } catch (error) {
+                       showError(error);
+                     }
+                     if (result.message) {
+                       showError("error: " + instance.request.status + " melding: " + result.message);
+                     }
+                     else {
+                       showError("error: " + instance.request.status);
+                     }
+                     instance.busy = false;
+                   } else {
+                     showError("error: unknown");
+                     instance.busy = false;
+                   }
+                 }
+               }
+             }
 
 
-        function setScore(spelerId,value){
+
+           } else {
+             // no request; apparently no ajax available
+             return false;
+           }
+
+           this.send = function () {
+             // only when not active
+             if (instance.busy) {
+               return false
+             }
+             instance.busy = new Date().getTime();
+             // prevent caching
+             if (instance.url.search('\\?') == -1) {
+               instance.url = instance.url + '?';
+             } else {
+               instance.url = instance.url + '&';
+             }
+
+             //
+             if (instance.method == 'GET') {
+               instance.url = instance.url + instance.busy;
+             }
+             // send
+             instance.request.open(instance.method, instance.url, true);
+
+
+             for (var key in this.requestHeaders) {
+               instance.request.setRequestHeader(key, this.requestHeaders[key])
+             }
+
+             if (instance.method == 'POST') {
+               //      instance.request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+               //      instance.request.setRequestHeader("Content-length", instance.params.length);
+               //      instance.request.setRequestHeader("Connection", "close");
+               // console.log(instance.params);
+               //                instance.request.setRequestHeader( "Content-type", "application/json" );
+               instance.request.send(instance.params);
+
+             } else {
+               instance.request.send(null);
+             }
+           }
+
+           this.abort = function () {
+             if (instance.busy) {
+               instance.request.abort();
+               instance.request = null;
+               instance.busy = false;
+             }
+           }
+
+         }
+
+
+         function getDataFromServer() {
+           var params = {};
+           request = new igor_ajax_request();
+           request.url = '/quizinfo';
+           request.method = 'GET';
+           request.params = JSON.stringify(params);
+           request.callback = function (currentrequest) {
+             try {
+               quiz = eval("(" + currentrequest.responseText + ")");
+               initQuiz();
+             } catch (error) {
+               alert(error);
+             }
+           }
+           request.send();
+         }
+
+
+         var spelerId = 0;
+         function initApplication() {
+           var match = window.location.search.match(/(?:\?|&)player-id=([^&]+)(?:&|$)/);
+           if (match) {
+             spelerId = match[1];
+           }
+           getDataFromServer();
+         }
+
+         function clearBuzzers(){
+           document.getElementById('buzzorder').innerHTML ='';
+         }
+
+         function drawBuzzers() {
+           clearBuzzers();
+           quiz.currentBuzzerOrder.forEach(element => {
+             var id=element.id;
+             console.log(element);
+             console.log(quiz.players[element].fullname);
+             console.log(id);
+             document.getElementById('buzzorder').innerHTML += `<div id="buzzblock${id}" class="buzzedblock player${element}">${quiz.players[element].fullname}</div>`
+           });
+         }
+
+         function drawScore() {
+           // sorteer
+           var scoreOrder = quiz.players.sort(function(a, b){return b.score - a.score});
+           // leeg
+           document.getElementById('scoreboard').innerHTML = '';
+           // teken volgorde
+           scoreOrder.forEach(element => {
+             var id = element.id
+             document.getElementById('scoreboard').innerHTML += 
+             `<div id="playerpostition${id}" class="playername player${element.spelerId}">${element.fullname}</div>
+                <div id="scorepostition${id}" class="score">
+                    <input type="button" value="-" onclick="setScore(${id},${element.score-1})">
+                    ${element.score}
+                    <input type="button" value="+" onclick="setScore(${id},${element.score+1})">
+                </div>`
+                id++;                        
+             });
+
+         }
+         
+         function initQuiz() {
+           document.getElementById('title').innerHTML = quiz.title;
+           drawBuzzers();
+           drawScore();
+         }
+
+         function startQuiz() {
+         }
+
+         function buzz(){
+           var params = { spelerId: spelerId };
+           request = new igor_ajax_request();
+           request.url = '/buzz';
+           request.method = 'POST';
+           request.params = JSON.stringify(params);
+           request.callback = function (currentrequest) {
+             try {
+               response = eval("(" + currentrequest.responseText + ")");
+             } catch (error) {
+               alert(error);
+             }
+           }
+           request.send();
+         }
+
+         function setScore(spelerId,value){
             var params = { spelerId, value};
             request = new igor_ajax_request();
             request.url = '/host/setscore';
@@ -294,120 +287,137 @@
             console.log(params);
         }
 
-        function resetQuiz(){
-            var params = { };
-            request = new igor_ajax_request();
-            request.url = '/host/resetquiz';
-            request.method = 'POST';
-            request.params = JSON.stringify(params);
-            request.callback = function (currentrequest) {
-                try {
-                    response = eval("(" + currentrequest.responseText + ")");
-                } catch (error) {
-                    alert(error);
-                }
-            }
-            request.send();
-        }
+        function alterScore(spelerId,value){
+           var params = { spelerId, value};
+           request = new igor_ajax_request();
+           request.url = '/host/score';
+           request.method = 'POST';
+           request.params = JSON.stringify(params);
+           request.callback = function (currentrequest) {
+             try {
+               response = eval("(" + currentrequest.responseText + ")");
+             } catch (error) {
+               alert(error);
+             }
+           }
+           request.send();
+         }
 
-        function resetBuzzers(){
-            var params = { };
-            request = new igor_ajax_request();
-            request.url = '/host/resetbuzzers';
-            request.method = 'POST';
-            request.params = JSON.stringify(params);
-            request.callback = function (currentrequest) {
-                try {
-                    response = eval("(" + currentrequest.responseText + ")");
-                } catch (error) {
-                    alert(error);
-                }
-            }
-            request.send();
-        }
+         function resetQuiz(){
+           var params = { };
+           request = new igor_ajax_request();
+           request.url = '/host/resetquiz';
+           request.method = 'POST';
+           request.params = JSON.stringify(params);
+           request.callback = function (currentrequest) {
+             try {
+               response = eval("(" + currentrequest.responseText + ")");
+             } catch (error) {
+               alert(error);
+             }
+           }
+           request.send();
+         }
 
-        var source = new EventSource("/stream");
-        source.onmessage = function (event) {
-            if (event.data) {
-                let eventMessage = {};
-                try {
-                    eventMessage = JSON.parse(event.data)
-                } catch {
+         function resetBuzzers(){
+           var params = { };
+           request = new igor_ajax_request();
+           request.url = '/host/resetbuzzers';
+           request.method = 'POST';
+           request.params = JSON.stringify(params);
+           request.callback = function (currentrequest) {
+             try {
+               response = eval("(" + currentrequest.responseText + ")");
+             } catch (error) {
+               alert(error);
+             }
+           }
+           request.send();
+         }
 
-                }
-                console.log(eventMessage);
-                if (eventMessage && eventMessage.type == 'loging') {
+         var source = new EventSource("/stream");
+         source.onmessage = function (event) {
+           if (event.data) {
+             let eventMessage = {};
+             try {
+               eventMessage = JSON.parse(event.data)
+             } catch {
 
-                    let text = new Date().toLocaleTimeString() + '\t' + eventMessage.messagetext;
-                    let statusScroller = document.getElementById("statusScroller");
+             }
+             console.log(eventMessage);
+             if (eventMessage && eventMessage.type == 'loging') {
 
-                    document.getElementById("statusText").innerHTML += text + "<br>";
-                    statusScroller.scrollTop = document.getElementById("statusText").clientHeight;
-                }
+               let text = new Date().toLocaleTimeString() + '\t' + eventMessage.messagetext;
+               let statusScroller = document.getElementById("statusScroller");
 
-                if (eventMessage && eventMessage.type == 'buzzers') {
-                    let messageObject = eventMessage.messageObject;
-                    quiz.currentBuzzerOrder = messageObject.currentBuzzerOrder;
-                    drawBuzzers();
-                }
+               document.getElementById("statusText").innerHTML += text + "<br>";
+               statusScroller.scrollTop = document.getElementById("statusText").clientHeight;
+             }
 
-                if (eventMessage && eventMessage.type == 'score') {
-                    let messageObject = eventMessage.messageObject;
-                    tracklayout.blocks[messageObject.block].status = messageObject.status;
-                    drawBlock(messageObject.block);
-                }
+             if (eventMessage && eventMessage.type == 'buzzers') {
+               let messageObject = eventMessage.messageObject;
+               quiz.currentBuzzerOrder = messageObject.currentBuzzerOrder;
+               drawBuzzers();
+             }
 
-                if (eventMessage && eventMessage.type == 'nextQuestion') {
-                    console.log(eventMessage);
-                    let messageObject = eventMessage.messageObject;
-                    if (tracklayout.turnouts[messageObject.turnout]) {
-                        tracklayout.turnouts[messageObject.turnout].status = messageObject.status;
-                        setTurnout(messageObject.turnout);
-                    }
-                }
+             if (eventMessage && eventMessage.type == 'score') {
+               let messageObject = eventMessage.messageObject;
+               tracklayout.blocks[messageObject.block].status = messageObject.status;
+               drawBlock(messageObject.block);
+             }
 
-                if (eventMessage && eventMessage.type == 'resetQuiz') {
-                    let messageObject = eventMessage.messageObject;
-                    quiz = messageObject;
-                    initQuiz();
-                }
+             if (eventMessage && eventMessage.type == 'nextQuestion') {
+               console.log(eventMessage);
+               let messageObject = eventMessage.messageObject;
+               if (tracklayout.turnouts[messageObject.turnout]) {
+                 tracklayout.turnouts[messageObject.turnout].status = messageObject.status;
+                 setTurnout(messageObject.turnout);
+               }
+             }
 
-                if (eventMessage && eventMessage.type == 'forceReload') {
-                    let messageObject = eventMessage.messageObject;
-                    location.reload();
-                }
+             if (eventMessage && eventMessage.type == 'resetQuiz') {
+               let messageObject = eventMessage.messageObject;
+               quiz = messageObject;
+               initQuiz();
+             }
 
-            }
-        };
+             if (eventMessage && eventMessage.type == 'forceReload') {
+               let messageObject = eventMessage.messageObject;
+               location.reload();
+             }
 
-    </script>
-</head>
+           }
+         };
 
-<body onload="initApplication()">
-    <div id="pagecontainer" style="width:100%;height:100%;position:absolute; top:0px; left:0px;">
-        <div style="width:100%;height:25px;" id="title" class="title">Title</div>
+        </script>
+    </head>
 
-        <div style="width:100%;height:75%; background-color: purple; position:absolute;">
-            <div style="width:32%;height:100%; background-color: lightgray; position:absolute; left:0px;">
-                <div id="scoreboard" width="100%" height="900" style="width:100%;height:100%;">
+    <body onload="initApplication()">
+        <div id="pagecontainer" style="width:100%;height:100%;position:absolute; top:0px; left:0px;">
+            <div style="width:100%;height:25px;" id="title" class="title">Title</div>
+
+            <div style="width:100%;height:75%; background-color: purple; position:absolute;">
+                <div style="width:32%;height:100%; background-color: lightgray; position:absolute; left:0px;">
+                    <div id="scoreboard" width="100%" height="900" style="width:100%;height:100%;">
+                    </div>
+>>>>>>> c313adf875ce523d78cfc7e6348276e26378656c
+                </div>
+                <div style="width:32%;height:100%; background-color: lightgoldenrodyellow;position:absolute; left:34%">
+                    <div id="buzzer" width="" height="900" style="width:100%;height:100%;">
+                        <div id="buzzer" class="buzzer" onclick="javascript: void buzz();">BUZZER</div>
+                    </div>
+
+                </div>
+                <div style="width:32%;height:100%; background-color: lightblue;position:absolute;right: 0px;">
+                    <div id="buzzorder" width="" height="900" style="width:100%;height:100%;">
+                    </div>
                 </div>
             </div>
-            <div style="width:32%;height:100%; background-color: lightgoldenrodyellow;position:absolute; left:34%">
-                <div id="buzzer" width="" height="900" style="width:100%;height:100%;">
-                    <div id="buzzer" class="buzzer" onclick="javascript: void buzz();">BUZZER</div>
-                </div>
-
-            </div>
-            <div style="width:32%;height:100%; background-color: lightblue;position:absolute;right: 0px;">
-                <div id="buzzorder" width="" height="900" style="width:100%;height:100%;">
-                </div>
+            <div id="hostContainer" style="width:100%; height:25%; background-color: lightgreen; color:black; padding:20px;position:absolute; bottom:0px;">
+                <input type="button" value="Reset Quiz" onclick="resetQuiz()">
+                <input type="button" value="Clear Buzzers" onclick="resetBuzzers()">
             </div>
         </div>
-        <div id="hostContainer" style="width:100%; height:25%; background-color: lightgreen; color:black; padding:20px;position:absolute; bottom:0px;">
-            <input type="button" value="Reset Quiz" onclick="resetQuiz()">
-            <input type="button" value="Clear Buzzers" onclick="resetBuzzers()">
-        </div>
-    </div>
-</body>
+    </body>
 
 </html>
