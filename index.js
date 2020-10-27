@@ -4,34 +4,42 @@ global.quiz = {
     name: "eerste test Quiz",
     title: "eerste test Quiz titel",
     players : [{
+        id: 1,
         score: 0,
         fullname: 'André',
         channelName: 'andre'
     },{
+        id: 2,
         score: 9,
         fullname: 'Freek',
         channelName: 'freek'
     },{
+        id: 3,
         score: 0,
         fullname: 'Maarten',
         channelName: 'maarten'
     },{
+        id: 4,
         score: 3,
         fullname: 'Arjan',
         channelName: 'maarten'
     },{
+        id: 5,
         score: 7,
         fullname: 'Olaf',
         channelName: 'olaf'
     },{
+        id: 6,
         score: 2340,
         fullname: 'Niels',
         channelName: 'niels'
     },{
+        id: 7,
         score: 0,
         fullname: 'Daan',
         channelName: 'daan'
     },{
+        id: 8,
         score: 0,
         fullname: 'Edwin',
         channelName: 'edwin'

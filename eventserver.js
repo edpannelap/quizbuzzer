@@ -79,7 +79,7 @@ function startServer() {
       eventTargets.push(res)
     }
 
-  }).listen(80);
+  }).listen(8080);
 }
 
 function sendEvent(event) {
