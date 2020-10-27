@@ -36,12 +36,38 @@ function startServer() {
     
     if (req.url.match(/host\/resetquiz/) && req.method === 'POST') {
       global.resetQuiz();
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(global.quiz));
     }
 
     if (req.url.match(/host\/resetbuzzers/) && req.method === 'POST') {
       global.resetBuzzers();
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(global.quiz));
     }
 
+    if (req.url.match(/host\/setscore/) && req.method === 'POST') {
+      let body = [];
+      req.on('data', (chunk) => {
+        body.push(chunk);
+      }).on('end', () => {
+        rawbody = Buffer.concat(body).toString();
+        // at this point, `body` has the entire request body stored in it as a string
+        try {
+          jsonbody = JSON.parse(rawbody);
+        } catch (error) {
+        
+        }
+        console.log(jsonbody);
+        var foundIndex = global.quiz.players.findIndex(element => { return element.id === jsonbody.spelerId } );
+        console.log(foundIndex);
+        global.quiz.players[foundIndex].score = jsonbody.score;
+        global.updateScore();
+      });
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(global.quiz));
+    }
+  
     if (req.url.match(/buzz/) && req.method === 'POST') {
       let body = [];
       req.on('data', (chunk) => {

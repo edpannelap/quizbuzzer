@@ -240,8 +240,13 @@
                 document.getElementById('scoreboard').innerHTML += 
                 `<div id="scoreblock${id}" class="scoreblock"> 
                         <div id="playerpostition${id}" class="playername player${element.spelerId}">${element.fullname}</div>
-                        <div id="scorepostition${id}" class="score">${element.score}</div>
+                        <div id="scorepostition${id}" class="score">
+                            <input type="button" value="-" onclick="setScore(${id},${element.score-1})">
+                            ${element.score}
+                            <input type="button" value="+" onclick="setScore(${id},${element.score+1})">
+                        </div>
                  </div>`
+            
             });
 
         }
@@ -271,10 +276,11 @@
             request.send();
         }
 
-        function alterScore(spelerId,value){
+
+        function setScore(spelerId,value){
             var params = { spelerId, value};
             request = new igor_ajax_request();
-            request.url = '/host/score';
+            request.url = '/host/setscore';
             request.method = 'POST';
             request.params = JSON.stringify(params);
             request.callback = function (currentrequest) {
@@ -285,6 +291,7 @@
                 }
             }
             request.send();
+            console.log(params);
         }
 
         function resetQuiz(){
