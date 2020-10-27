@@ -44,7 +44,7 @@ global.quiz = {
         fullname: 'Edwin',
         channelName: 'edwin'
     }],
-    currentBuzzerOrder :[4,2,0]
+    currentBuzzerOrder :[]
 }
 
 

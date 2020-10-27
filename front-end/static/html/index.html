@@ -234,13 +234,15 @@
            scoreOrder.forEach(element => {
              var id = element.id
              document.getElementById('scoreboard').innerHTML += 
-             `<div id="playerpostition${id}" class="playername player${element.spelerId}">${element.fullname}</div>
-                <div id="scorepostition${id}" class="score">
-                    <input type="button" value="-" onclick="setScore(${id},${element.score-1})">
-                    ${element.score}
-                    <input type="button" value="+" onclick="setScore(${id},${element.score+1})">
-                </div>`
-                id++;                        
+             `<div id="scoreblock${id}" class="scoreblock">
+              <div id="playerpostition${id}" class="playername player${element.id}" onclick="document.location.href='/client?player-id=${id}'">${element.fullname}</div>
+              <div id="scorepostition${id}" class="score">
+              <input type="button" value="-" onclick="setScore(${id},${element.score-1})">
+              ${element.score}
+              <input type="button" value="+" onclick="setScore(${id},${element.score+1})">
+              </div>
+            </div>`
+                            id++;                        
              });
 
          }

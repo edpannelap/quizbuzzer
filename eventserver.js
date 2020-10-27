@@ -80,6 +80,7 @@ function startServer() {
         } catch (error) {
           
         }
+        console.log(jsonbody.spelerId);
         if (jsonbody.spelerId) {
           if (!global.quiz.currentBuzzerOrder.includes(jsonbody.spelerId)) {
             global.quiz.currentBuzzerOrder.push(jsonbody.spelerId);
