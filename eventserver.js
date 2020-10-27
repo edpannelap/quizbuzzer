@@ -35,15 +35,17 @@ function startServer() {
     }
     
     if (req.url.match(/host\/resetquiz/) && req.method === 'POST') {
-      global.resetQuiz();
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(global.quiz));
+      res.end(JSON.stringify(true));
+      global.resetQuiz();
+      console.log(global.quiz);
     }
 
     if (req.url.match(/host\/resetbuzzers/) && req.method === 'POST') {
-      global.resetBuzzers();
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(global.quiz));
+      res.end(JSON.stringify(true));
+      global.resetBuzzers();
+      console.log(global.quiz);
     }
 
     if (req.url.match(/host\/setscore/) && req.method === 'POST') {
@@ -58,18 +60,15 @@ function startServer() {
         } catch (error) {
         
         }
-        console.log(jsonbody);
         var foundIndex = global.quiz.players.findIndex(element => { return element.id === jsonbody.spelerId } );
-        console.log("index:",foundIndex);
         global.quiz.players[foundIndex].score = jsonbody.score;
-        console.log(quiz);
         global.updateScore();
       });
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(global.quiz));
+      res.end(JSON.stringify(true));
     }
   
-    if (req.url.match(/buzz/) && req.method === 'POST') {
+    if (req.url.match(/^\/buzz/) && req.method === 'POST') {
       let body = [];
       req.on('data', (chunk) => {
         body.push(chunk);
@@ -81,7 +80,7 @@ function startServer() {
         } catch (error) {
           
         }
-        console.log(jsonbody.spelerId);
+        console.log('Buzzzz:',jsonbody.spelerId);
         if (!global.quiz.currentBuzzerOrder.includes(jsonbody.spelerId)) {
           global.quiz.currentBuzzerOrder.push(jsonbody.spelerId);
         }
@@ -90,7 +89,7 @@ function startServer() {
         let event = { type: 'buzzers', level: 'info', messagetext: messagetext, messageObject: messageObject };
         global.eventserver.sendEvent(event);
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(global.quiz));
+        res.end(JSON.stringify(true));
       });
       
     }

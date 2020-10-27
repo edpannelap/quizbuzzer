@@ -13,7 +13,7 @@ global.quiz = {
         color: 'red'
     },{
         id: 2,
-        score: 9,
+        score: 0,
         fullname: 'Freek',
         channelName: 'freek',
         color: 'yellow'
@@ -25,19 +25,19 @@ global.quiz = {
         color: 'gray'
     },{
         id: 4,
-        score: 3,
+        score: 0,
         fullname: 'Arjan',
         channelName: 'maarten',
         color: 'orange'
     },{
         id: 5,
-        score: 7,
+        score: 0,
         fullname: 'Olaf',
         channelName: 'olaf',
         color: 'green'
     },{
         id: 6,
-        score: 2340,
+        score: 0,
         fullname: 'Niels',
         channelName: 'niels',
         color: 'blue'
@@ -81,7 +81,7 @@ global.resetQuiz = function() {
 
 global.nextQuestion = function() {
     global.quiz.currentBuzzerOrder = [];
-    const messageObject = {};
+    const messageObject = {currentBuzzerOrder: []};
     const messagetext ='';
     let event = { type: 'nextQuestion', level: 'info', messagetext: messagetext, messageObject: messageObject };
     global.eventserver.sendEvent(event);
@@ -90,11 +90,10 @@ global.nextQuestion = function() {
 
 global.resetBuzzers = function() {
     global.quiz.currentBuzzerOrder = [];
-    const messageObject = {currentBuzzerOrder: global.quiz.currentBuzzerOrder};
+    const messageObject = {currentBuzzerOrder: []};
     const messagetext ='';
     let event = { type: 'buzzers', level: 'info', messagetext: messagetext, messageObject: messageObject };
     global.eventserver.sendEvent(event);
-
 }
 
 global.forceReload = function () {
