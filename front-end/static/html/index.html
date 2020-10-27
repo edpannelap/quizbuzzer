@@ -271,6 +271,54 @@
             request.send();
         }
 
+        function alterScore(spelerId,value){
+            var params = { spelerId, value};
+            request = new igor_ajax_request();
+            request.url = '/host/score';
+            request.method = 'POST';
+            request.params = JSON.stringify(params);
+            request.callback = function (currentrequest) {
+                try {
+                    response = eval("(" + currentrequest.responseText + ")");
+                } catch (error) {
+                    alert(error);
+                }
+            }
+            request.send();
+        }
+
+        function resetQuiz(){
+            var params = { };
+            request = new igor_ajax_request();
+            request.url = '/host/resetquiz';
+            request.method = 'POST';
+            request.params = JSON.stringify(params);
+            request.callback = function (currentrequest) {
+                try {
+                    response = eval("(" + currentrequest.responseText + ")");
+                } catch (error) {
+                    alert(error);
+                }
+            }
+            request.send();
+        }
+
+        function resetBuzzers(){
+            var params = { };
+            request = new igor_ajax_request();
+            request.url = '/host/resetbuzzers';
+            request.method = 'POST';
+            request.params = JSON.stringify(params);
+            request.callback = function (currentrequest) {
+                try {
+                    response = eval("(" + currentrequest.responseText + ")");
+                } catch (error) {
+                    alert(error);
+                }
+            }
+            request.send();
+        }
+
         var source = new EventSource("/stream");
         source.onmessage = function (event) {
             if (event.data) {
@@ -348,8 +396,9 @@
                 </div>
             </div>
         </div>
-        <div id="hostContainer" style="width:100%; height:25%; background-color: lightgreen; color:black; padding:20px;">
-            Clear Buzzers
+        <div id="hostContainer" style="width:100%; height:25%; background-color: lightgreen; color:black; padding:20px;position:absolute; bottom:0px;">
+            <input type="button" value="Reset Quiz" onclick="resetQuiz()">
+            <input type="button" value="Clear Buzzers" onclick="resetBuzzers()">
         </div>
     </div>
 </body>

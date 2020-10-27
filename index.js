@@ -50,19 +50,19 @@ setInterval(function () {
 
 
 setInterval(function () {
-    resetBuzzers();
+    global.resetBuzzers();
 }, 6000);
 
 setInterval(function () {
-    resetQuiz();
+    global.resetQuiz();
 }, 12000);
 
 setInterval(function () {
-    forceReload();
+    global.forceReload();
 }, 60000);
 
 
-function resetQuiz() {
+global.resetQuiz = function() {
     global.quiz.currentBuzzerOrder = [];
     global.quiz.players.forEach(element => {
         element.score = 0;
@@ -74,7 +74,7 @@ function resetQuiz() {
     resetBuzzers();
 }
 
-function nextQuestion() {
+global.nextQuestion = function() {
     global.quiz.currentBuzzerOrder = [];
     const messageObject = {};
     const messagetext ='';
@@ -83,7 +83,7 @@ function nextQuestion() {
     resetBuzzers();
 }
 
-function resetBuzzers() {
+global.resetBuzzers = function() {
     global.quiz.currentBuzzerOrder = [];
     const messageObject = {currentBuzzerOrder: global.quiz.currentBuzzerOrder};
     const messagetext ='';
@@ -92,7 +92,7 @@ function resetBuzzers() {
 
 }
 
-function forceReload() {
+global.forceReload = function () {
     const messageObject = {};
     const messagetext ='';
     let event = { type: 'forceReload', level: 'info', messagetext: messagetext, messageObject: messageObject };

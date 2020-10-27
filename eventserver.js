@@ -33,6 +33,14 @@ function startServer() {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(global.quiz));
     }
+    
+    if (req.url.match(/host\/resetquiz/) && req.method === 'POST') {
+      global.resetQuiz();
+    }
+
+    if (req.url.match(/host\/resetbuzzers/) && req.method === 'POST') {
+      global.resetBuzzers();
+    }
 
     if (req.url.match(/buzz/) && req.method === 'POST') {
       let body = [];
