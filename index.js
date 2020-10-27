@@ -57,19 +57,6 @@ setInterval(function () {
 }, 60000);
 
 
-setInterval(function () {
-    global.resetBuzzers();
-}, 6000);
-
-setInterval(function () {
-    global.resetQuiz();
-}, 12000);
-
-setInterval(function () {
-    global.forceReload();
-}, 60000);
-
-
 global.resetQuiz = function() {
     global.quiz.currentBuzzerOrder = [];
     global.quiz.players.forEach(element => {
