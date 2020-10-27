@@ -36,16 +36,16 @@ global.quiz = {
         fullname: 'Edwin',
         channelName: 'edwin'
     }],
-    currentBuzzerOrder :[1,4,2]
+    currentBuzzerOrder :[4,2,0]
 }
 
 
-const eventserver = require('./eventserver');
-eventserver.startServer();
+global.eventserver = require('./eventserver');
+global.eventserver.startServer();
 
 let count = 0;
 setInterval(function () {
-    eventserver.sendEvent('event keep alive' + count++)
+    global.eventserver.sendEvent('event keep alive' + count++)
 }, 60000);
 
 
