@@ -1,7 +1,5 @@
 'use strict';
 
-const { sendEvent } = require('./eventserver');
-
 global.quiz = { 
     name: "eerste test Quiz",
     title: "eerste test Quiz titel",
