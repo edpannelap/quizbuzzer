@@ -26,7 +26,7 @@ global.quiz = {
         fullname: 'Olaf',
         channelName: 'olaf'
     },{
-        score: 0,
+        score: 2340,
         fullname: 'Niels',
         channelName: 'niels'
     },{
