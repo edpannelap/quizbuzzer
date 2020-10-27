@@ -301,6 +301,27 @@
            request.send();
          }
 
+         function getLatancy() {
+          var now = new Date();
+          const startTimer = now.getMilliseconds();
+          var params = { now };
+           request = new igor_ajax_request();
+           request.url = '/ping';
+           request.method = 'POST';
+           request.params = JSON.stringify(params);
+           request.callback = function (currentrequest) {
+            var now = new Date();
+            const endTimer = now.getMilliseconds();
+             try {
+               alert((endTimer - startTimer)/2);
+               response = eval("(" + currentrequest.responseText + ")");
+             } catch (error) {
+               alert(error);
+             }
+           }
+           request.send();
+         }
+
          var source = new EventSource("/stream");
          source.onmessage = function (event) {
            if (event.data) {
@@ -369,6 +390,7 @@
             <div id="hostContainer" style="width:100%; height:5%; background-color: lightgreen; color:black; padding:20px;position:absolute; bottom:0px;">
                 <input type="button" value="Reset Quiz" onclick="resetQuiz()">
                 <input type="button" value="Clear Buzzers" onclick="resetBuzzers()">
+                <input type="button" value="Latancy check" onclick="getLatancy()">
             </div>
         </div>
     </body>

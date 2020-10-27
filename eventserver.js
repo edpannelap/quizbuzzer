@@ -29,6 +29,12 @@ function startServer() {
       });
     }
 
+    if (req.url.match(/ping/)) {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(true));
+    }
+
+
     if (req.url.match(/quizinfo/)) {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(global.quiz));
